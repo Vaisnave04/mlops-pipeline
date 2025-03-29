@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # Load dataset
 iris = load_iris()
@@ -19,9 +19,13 @@ model.fit(X_train, y_train)
 # Make predictions
 y_pred = model.predict(X_test)
 
-# Compute Mean Absolute Error
+# Compute MAE
 mae = mean_absolute_error(y_test, y_pred)
-print(f"Mean Absolute Error: {mae:.4f}")
+print(f"Mean Absolute Error (MAE): {mae:.4f}")
+
+# Compute MSE
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error (MSE): {mse:.4f}")
 
 # Save model
 joblib.dump(model, "model.pkl")
