@@ -25,7 +25,7 @@ jobs:
         run: python train.py
 
       - name: Archive model artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   # ✅ Updated version
         with:
           name: trained-model
           path: model.pkl
