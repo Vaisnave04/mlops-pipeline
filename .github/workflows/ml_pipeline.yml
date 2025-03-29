@@ -1,10 +1,7 @@
-name: ML Pipeline CI/CD
+name: ML Pipeline CI/CD 
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -54,20 +51,3 @@ jobs:
 
       - name: Run tests
         run: python test.py || echo "No test script found, skipping tests."
-
-  notify:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Send Email Notification
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USER }}
-          password: ${{ secrets.EMAIL_PASS }}
-          subject: "✅ ML Pipeline Completed"
-          body: "Your ML pipeline has successfully completed! 🚀"
-          to: "vaisnavei@karunya.edu.in"
-          from: "GitHub Actions Bot"
