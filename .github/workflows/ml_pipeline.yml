@@ -1,61 +1,24 @@
-on:
-  push:
-    branches:
-      - main
-
-jobs:
+name: model-training
+on: [push]
+jobs: 
   run:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:20.04
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: List files
-        run: ls -lah
-
-      - name: Install dependencies
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          apt update && apt install -y tzdata python3 python3-pip software-properties-common
-          ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-          dpkg-reconfigure -f noninteractive tzdata
-          add-apt-repository ppa:ubuntu-toolchain-r/test -y
-          apt update && apt install -y libc6
-          pip3 install --upgrade pip
-          pip3 install -r requirements.txt
-
-      - name: Install dependencies for CML
-        run: |
-          pip3 install cloud-ml-sdk --upgrade
-          pip3 install cml
-
-
-
-
-
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - uses: iterative/setup-cml@v1
       - name: Train model
-        run: python3 train.py
-
-      - name: Generate report
-        run: |
-          echo "# Model Metrics" > report.md
-          if [ -f metrics.txt ]; then
-            cat metrics.txt >> report.md
-          else
-            echo "metrics.txt not found!" >> report.md
-          fi
-
-      - name: Upload trained model
-        uses: actions/upload-artifact@v4
-        with:
-          name: trained-model
-          path: model.pkl
-
-      - name: Send CML report
         env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.Joy123_T }}
         run: |
-          cml-send-comment report.md
+          pip install -r requirements.txt
+          python train.py
+
+          cat metrics.txt >> report.md
+          echo "![](./model_results.png)" >> report.md
+
+          if [ -f "model_results.png" ]; then
+              cml comment create report.md || echo "cml comment failed"
+          else
+              echo "model_results.png not found"
+          fi
