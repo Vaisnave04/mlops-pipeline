@@ -30,8 +30,9 @@ jobs:
       - name: Install dependencies for CML
         run: |
           pip3 install cloud-ml-common>=0.2.2
-          pip3 install cloud-ml-sdk==0.2.12
+          pip3 install cloud-ml-sdk==0.3.71
           pip3 install cml
+
 
 
       - name: Train model
