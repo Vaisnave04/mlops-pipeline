@@ -29,9 +29,9 @@ jobs:
 
       - name: Install dependencies for CML
         run: |
-          pip3 install cloud-ml-common --upgrade
           pip3 install cloud-ml-sdk --upgrade
           pip3 install cml
+
 
 
 
