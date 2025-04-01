@@ -24,6 +24,7 @@ jobs:
           dpkg-reconfigure -f noninteractive tzdata
           add-apt-repository ppa:ubuntu-toolchain-r/test -y
           apt update && apt install -y libc6
+          pip3 install --upgrade pip
           pip3 install -r requirements.txt
 
       - name: Install CML
