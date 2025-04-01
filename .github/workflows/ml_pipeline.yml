@@ -1,4 +1,4 @@
-name: ML Pipeline CI/CD 
+name: ML Pipeline CI/CD
 
 on:
   push:
@@ -6,48 +6,33 @@ on:
       - main
 
 jobs:
-  train:
+  run:
     runs-on: ubuntu-latest
+    container: docker://dvcorg/cml-py3:latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Train model
-        run: python train.py
+        run: python model.py
 
-      - name: Verify model file
-        run: ls -lh model.pkl  # Check if model.pkl exists
+      - name: Generate report
+        run: |
+          echo "# Model Metrics" > report.md
+          cat metrics.txt >> report.md
 
-      - name: Archive trained model
+      - name: Upload trained model
         uses: actions/upload-artifact@v4
         with:
           name: trained-model
           path: model.pkl
 
-  test:
-    needs: train
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run tests
-        run: python test.py || echo "No test script found, skipping tests."
+      - name: Send CML report
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml-send-comment report.md
