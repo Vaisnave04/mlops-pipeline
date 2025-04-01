@@ -21,11 +21,10 @@ y_pred = model.predict(X_test)
 
 # Compute MAE
 mae = mean_absolute_error(y_test, y_pred)
-print(f"Mean Absolute Error (MAE): {mae:.4f}")
 
-# Compute MSE
+
 mse = mean_squared_error(y_test, y_pred)
 print(f"Mean Squared Error (MSE): {mse:.4f}")
-
+print(f"Mean Absolute Error (MAE): {mae:.4f}")
 # Save model
 joblib.dump(model, "model.pkl")
