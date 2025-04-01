@@ -15,6 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: List files
+        run: ls -lah
+
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
@@ -26,7 +29,7 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Train model
-        run: python3 model.py
+        run: python3 train.py
 
       - name: Generate report
         run: |
