@@ -26,7 +26,7 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Train model
-        run: python model.py
+        run: python3 model.py
 
       - name: Generate report
         run: |
